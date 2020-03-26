@@ -23,4 +23,5 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build
-      run: cd backend && go build -v -o app
+      working-directory: backend
+      run: go build -v -o app
