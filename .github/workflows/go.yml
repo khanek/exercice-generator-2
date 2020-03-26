@@ -18,9 +18,12 @@ jobs:
       with:
         go-version: 1.11
       id: go
-    
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
     - name: Move current directory to source directory
-      run: cd backend
+      run: ls -l;cd backend
 
     - name: Build
       run: go build -v -o app
