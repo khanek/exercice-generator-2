@@ -1,0 +1,1 @@
+![Go](https://github.com/khanek/exercice-generator-2/workflows/Go/badge.svg)
