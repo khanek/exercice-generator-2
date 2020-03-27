@@ -2,7 +2,7 @@ package main
 
 import (
 	"khanek/exercise-generator/api"
-	"khanek/exercise-generator/core/db"
+	"khanek/exercise-generator/core/database"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -15,8 +15,8 @@ var (
 )
 
 func main() {
-	database := db.DB()
-	defer database.Close()
+	db := database.Initialize()
+	defer db.Close()
 
 	g.Go(initializeAPI)
 

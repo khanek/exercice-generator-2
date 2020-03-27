@@ -2,20 +2,28 @@ package exercises
 
 import (
 	"fmt"
-	"strings"
-	"math/rand"
-	"time"
 	"khanek/exercise-generator/core/math"
 	"khanek/exercise-generator/core/pdf"
 	"khanek/exercise-generator/words"
+	"math/rand"
+	"strings"
+	"time"
 
 	"github.com/pkg/errors"
 	"github.com/signintech/gopdf"
 )
 
 type ceasarExercise struct {
-	Words []*words.Word
+	Tag   string
 	Shift int
+}
+
+func (e ceasarExercise) getWords() ([]*words.Word, error) {
+	words, err := words.FindWordsByTag(e.Tag, 38)
+	if err != nil {
+		return nil, err
+	}
+	return words, nil
 }
 
 func (e ceasarExercise) ToPDF() (*gopdf.GoPdf, error) {
@@ -23,12 +31,17 @@ func (e ceasarExercise) ToPDF() (*gopdf.GoPdf, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "Couldn't create pdf")
 	}
-	lenWords := len(e.Words)
-	words := make([]pdf.Cell, lenWords)
-	maskedWords := make([]pdf.Cell, lenWords + 1)
+	var exerciseWords []*words.Word
+	exerciseWords, err = e.getWords()
+	if err != nil {
+		return nil, err
+	}
+	lenWords := len(exerciseWords)
+	answerWords := make([]pdf.Cell, lenWords)
+	maskedWords := make([]pdf.Cell, lenWords+1)
 	maskedWords[0] = pdf.NewFullWidthPageCell(getHelpText(e.Shift))
-	for i, word := range e.Words {
-		words[i] = pdf.NewHalfWidthPageCell(addSpaces(word.Value))
+	for i, word := range exerciseWords {
+		answerWords[i] = pdf.NewHalfWidthPageCell(addSpaces(word.Value))
 		maskedWords[i+1] = pdf.NewHalfWidthPageCell(addSpaces(ceasar(word.Value, e.Shift)))
 	}
 	// exercise page
@@ -36,16 +49,23 @@ func (e ceasarExercise) ToPDF() (*gopdf.GoPdf, error) {
 		return nil, errors.Wrap(err, "Error on add words to page")
 	}
 	// answers page
-	if err := pdf.AddCellsPage(pdfObj, words); err != nil {
+	if err := pdf.AddCellsPage(pdfObj, answerWords); err != nil {
 		return nil, errors.Wrap(err, "Error on add words to page")
 	}
 	return pdfObj, nil
 }
 
-
 type ceasarWithAlphabet struct {
-	Words []*words.Word
+	Tag   string
 	Shift int
+}
+
+func (e ceasarWithAlphabet) getWords() ([]*words.Word, error) {
+	words, err := words.FindWordsByTag(e.Tag, 36)
+	if err != nil {
+		return nil, err
+	}
+	return words, nil
 }
 
 func (e ceasarWithAlphabet) ToPDF() (*gopdf.GoPdf, error) {
@@ -53,21 +73,26 @@ func (e ceasarWithAlphabet) ToPDF() (*gopdf.GoPdf, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "Couldn't create pdf")
 	}
-	lenWords := len(e.Words)
-	words := make([]pdf.Cell, lenWords)
-	maskedWords := make([]pdf.Cell, lenWords + 2)
-	maskedWords[0] = pdf.NewFullWidthPageCell(getAlphabetText())
-	maskedWords[1] = pdf.NewFullWidthPageCell(getHelpText(e.Shift))
-	for i, word := range e.Words {
-		words[i] = pdf.NewHalfWidthPageCell(addSpaces(strings.ToUpper(word.Value)))
-		maskedWords[i+2] = pdf.NewHalfWidthPageCell(addSpaces(ceasar(strings.ToUpper(word.Value), e.Shift)))
+	var exerciseWords []*words.Word
+	exerciseWords, err = e.getWords()
+	if err != nil {
+		return nil, err
+	}
+	lenWords := len(exerciseWords)
+	answerWords := make([]pdf.Cell, lenWords)
+	cryptedWords := make([]pdf.Cell, lenWords+2)
+	cryptedWords[0] = pdf.NewFullWidthPageCell(getAlphabetText())
+	cryptedWords[1] = pdf.NewFullWidthPageCell(getHelpText(e.Shift))
+	for i, word := range exerciseWords {
+		answerWords[i] = pdf.NewHalfWidthPageCell(addSpaces(strings.ToUpper(word.Value)))
+		cryptedWords[i+2] = pdf.NewHalfWidthPageCell(addSpaces(ceasar(strings.ToUpper(word.Value), e.Shift)))
 	}
 	// exercise page
-	if err := pdf.AddCellsPage(pdfObj, maskedWords); err != nil {
+	if err := pdf.AddCellsPage(pdfObj, cryptedWords); err != nil {
 		return nil, errors.Wrap(err, "Error on add words to page")
 	}
 	// answers page
-	if err := pdf.AddCellsPage(pdfObj, words); err != nil {
+	if err := pdf.AddCellsPage(pdfObj, answerWords); err != nil {
 		return nil, errors.Wrap(err, "Error on add words to page")
 	}
 	return pdfObj, nil
@@ -97,11 +122,11 @@ func randomShift() int {
 }
 
 // NewCeasarExercise creates new exercise with shifted words by tag
-func NewCeasarExercise(words []*words.Word) pdf.Writer {
-	return ceasarExercise{Words: words, Shift: randomShift()}
+func NewCeasarExercise(tag string) pdf.Writer {
+	return ceasarExercise{Tag: tag, Shift: randomShift()}
 }
 
 // NewCeasarWithHelpExercise creates new exercise with shifted words by tag and with help texts
-func NewCeasarWithHelpExercise(words []*words.Word) pdf.Writer {
-	return ceasarWithAlphabet{Words: words, Shift: -4}
+func NewCeasarWithHelpExercise(tag string) pdf.Writer {
+	return ceasarWithAlphabet{Tag: tag, Shift: randomShift()}
 }

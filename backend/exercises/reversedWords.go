@@ -9,7 +9,15 @@ import (
 )
 
 type reversedExercise struct {
-	Words []*words.Word
+	Tag string
+}
+
+func (e reversedExercise) getWords() ([]*words.Word, error) {
+	words, err := words.FindWordsByTag(e.Tag, 40)
+	if err != nil {
+		return nil, err
+	}
+	return words, nil
 }
 
 func (e reversedExercise) ToPDF() (*gopdf.GoPdf, error) {
@@ -17,11 +25,16 @@ func (e reversedExercise) ToPDF() (*gopdf.GoPdf, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "Couldn't create pdf")
 	}
-	lenWords := len(e.Words)
-	words := make([]pdf.Cell, lenWords)
+	var exerciseWords []*words.Word
+	exerciseWords, err = e.getWords()
+	if err != nil {
+		return nil, err
+	}
+	lenWords := len(exerciseWords)
+	answerWords := make([]pdf.Cell, lenWords)
 	reversedWords := make([]pdf.Cell, lenWords)
-	for i, word := range e.Words {
-		words[i] = pdf.NewHalfWidthPageCell(addSpaces(word.Value))
+	for i, word := range exerciseWords {
+		answerWords[i] = pdf.NewHalfWidthPageCell(addSpaces(word.Value))
 		reversedWords[i] = pdf.NewHalfWidthPageCell(addSpaces(reverse(word.Value)))
 	}
 	// exercise page
@@ -29,13 +42,13 @@ func (e reversedExercise) ToPDF() (*gopdf.GoPdf, error) {
 		return nil, errors.Wrap(err, "Error on add words to page")
 	}
 	// answers page
-	if err := pdf.AddCellsPage(pdfObj, words); err != nil {
+	if err := pdf.AddCellsPage(pdfObj, answerWords); err != nil {
 		return nil, errors.Wrap(err, "Error on add words to page")
 	}
 	return pdfObj, nil
 }
 
 // NewReversedExercise creates new exercise with masked words by tag
-func NewReversedExercise(words []*words.Word) pdf.Writer {
-	return reversedExercise{Words: words}
+func NewReversedExercise(tag string) pdf.Writer {
+	return reversedExercise{Tag: tag}
 }
