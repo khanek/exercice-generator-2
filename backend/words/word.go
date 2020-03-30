@@ -12,3 +12,12 @@ type Word struct {
 func (w Word) String() string {
 	return w.Value
 }
+
+func WordsToStrings(words []*Word) []string {
+	wordsLength := len(words)
+	ret := make([]string, wordsLength)
+	for i := 0; i < wordsLength; i++ {
+		ret[i] = words[i].Value
+	}
+	return ret
+}

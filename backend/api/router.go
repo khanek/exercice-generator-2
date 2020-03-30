@@ -20,5 +20,6 @@ func AddUrls(r *gin.Engine) {
 	r.GET(generateURL("/masked"), generateSimpleWordsExercisePDF(exercises.NewMaskedExercise))
 	r.GET(generateURL("/reversed"), generateSimpleWordsExercisePDF(exercises.NewReversedExercise))
 	r.GET(generateURL("/shuffled"), generateSimpleWordsExercisePDF(exercises.NewShuffledExercise))
+	r.GET(generateURL("/hidden"), generateSimpleWordsExercisePDF(exercises.NewHiddenWordsInTextExerciseExercise))
 	r.GET(generateURL("/ceasar"), ceasar)
 }

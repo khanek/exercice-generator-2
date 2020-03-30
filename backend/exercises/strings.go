@@ -89,3 +89,8 @@ func ceasar(s string, shift int) string {
 	}
 	return strings.ToUpper(string(runes))
 }
+
+func randomLetter() rune {
+	rand.Seed(time.Now().UnixNano())
+	return polishAlphabet[rand.Intn(len(polishAlphabet))]
+}
