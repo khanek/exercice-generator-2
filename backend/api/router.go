@@ -21,5 +21,15 @@ func AddUrls(r *gin.Engine) {
 	r.GET(generateURL("/reversed"), generateSimpleWordsExercisePDF(exercises.NewReversedExercise))
 	r.GET(generateURL("/shuffled"), generateSimpleWordsExercisePDF(exercises.NewShuffledExercise))
 	r.GET(generateURL("/hidden"), generateSimpleWordsExercisePDF(exercises.NewHiddenWordsInTextExerciseExercise))
-	r.GET(generateURL("/ceasar"), ceasar)
+	r.GET(generateURL("/replaced-letters"), generateSimpleWordsExercisePDF(exercises.NewLetterCipherWordsExercise))
+	r.GET(generateURL("/replaced-letters-with-numbers"), generateSimpleWordsExercisePDF(exercises.NewNumberCipherWordsExercise))
+	r.GET(generateURL("/messy"), generateSimpleWordsExercisePDF(exercises.NewMessyWordsExercise))
+	r.GET(generateURL("/ceasar"), func(c *gin.Context) {
+		exerciseFactory := exercises.NewCeasarExercise
+		if _, exist := c.GetQuery("withHelp"); exist {
+			exerciseFactory = exercises.NewCeasarWithHelpExercise
+		}
+		httpHandler := generateSimpleWordsExercisePDF(exerciseFactory)
+		httpHandler(c)
+	})
 }

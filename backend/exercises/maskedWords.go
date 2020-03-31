@@ -4,7 +4,6 @@ import (
 	"khanek/exercise-generator/core/pdf"
 	"khanek/exercise-generator/words"
 
-	"github.com/pkg/errors"
 	"github.com/signintech/gopdf"
 )
 
@@ -14,8 +13,16 @@ type maskedExercise struct {
 	Tag string
 }
 
+func (e maskedExercise) wordHandler(s string) string {
+	return mask(s, maskedWordPercent)
+}
+
+func (e maskedExercise) getTitle() []string {
+	return []string{"W poniższych przykładach proszę uzupełnić brakujące litery."}
+}
+
 func (e maskedExercise) getWords() ([]*words.Word, error) {
-	words, err := words.FindWordsByTag(e.Tag, 40)
+	words, err := words.FindWordsByTag(e.Tag, 38)
 	if err != nil {
 		return nil, err
 	}
@@ -23,31 +30,7 @@ func (e maskedExercise) getWords() ([]*words.Word, error) {
 }
 
 func (e maskedExercise) ToPDF() (*gopdf.GoPdf, error) {
-	pdfObj, err := pdf.NewPDF()
-	if err != nil {
-		return nil, errors.Wrap(err, "Couldn't create pdf")
-	}
-	var exerciseWords []*words.Word
-	exerciseWords, err = e.getWords()
-	if err != nil {
-		return nil, err
-	}
-	lenWords := len(exerciseWords)
-	answerWords := make([]pdf.Cell, lenWords)
-	maskedWords := make([]pdf.Cell, lenWords)
-	for i, word := range exerciseWords {
-		answerWords[i] = pdf.NewHalfWidthPageCell(addSpaces(word.Value))
-		maskedWords[i] = pdf.NewHalfWidthPageCell(addSpaces(mask(word.Value, maskedWordPercent)))
-	}
-	// exercise page
-	if err := pdf.AddCellsPage(pdfObj, maskedWords); err != nil {
-		return nil, errors.Wrap(err, "Error on add words to page")
-	}
-	// answers page
-	if err := pdf.AddCellsPage(pdfObj, answerWords); err != nil {
-		return nil, errors.Wrap(err, "Error on add words to page")
-	}
-	return pdfObj, nil
+	return generateWordExercisePDF(e)
 }
 
 // NewMaskedExercise creates new exercise with masked words by tag

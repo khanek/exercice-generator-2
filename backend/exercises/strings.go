@@ -94,3 +94,56 @@ func randomLetter() rune {
 	rand.Seed(time.Now().UnixNano())
 	return polishAlphabet[rand.Intn(len(polishAlphabet))]
 }
+
+func removeElement(src []rune, idx int) []rune {
+	// Remove the element at index i from src.
+	src[idx] = src[len(src)-1] // Copy last element to index i.
+	src[len(src)-1] = 0        // Erase last element (write zero value).
+	return src[:len(src)-1]    // Truncate slice.
+}
+
+func replaceLetters(source string, m map[rune]rune) string {
+	sourceRunes := []rune(source)
+	ret := make([]rune, len(sourceRunes))
+	for i, r := range sourceRunes {
+		mappedValue, exists := m[r]
+		if !exists {
+			ret[i] = r
+		} else {
+			ret[i] = mappedValue
+		}
+	}
+	return string(ret)
+}
+
+func addRandomLettersToWord(src string, n int) string {
+	srcRunes := []rune(src)
+	ret := make([]rune, len(srcRunes)+n)
+	lettersUsedFromWord := 0
+	randomLetters := 0
+	for i := 0; i < len(srcRunes)+n; i++ {
+		v := rand.Float64()
+		prob := float64(i+1) / float64(len(srcRunes))
+		if v > prob || n == randomLetters {
+			r := srcRunes[lettersUsedFromWord]
+			if unicode.IsSpace(r) {
+				ret[i] = randomLetter()
+			} else {
+				ret[i] = srcRunes[lettersUsedFromWord]
+			}
+			lettersUsedFromWord++
+		} else {
+			ret[i] = randomLetter()
+			randomLetters++
+		}
+
+	}
+
+	/*
+		n=2, srcl = 3
+		0 - rand
+		1 - letter = 1
+		2 -
+	*/
+	return string(ret)
+}
