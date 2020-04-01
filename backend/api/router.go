@@ -32,4 +32,5 @@ func AddUrls(r *gin.Engine) {
 		httpHandler := generateSimpleWordsExercisePDF(exerciseFactory)
 		httpHandler(c)
 	})
+	r.GET(generateURL("/splitted"), generateSimpleWordsExercisePDF(exercises.NewSplittedWordsExercise))
 }

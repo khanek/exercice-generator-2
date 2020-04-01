@@ -33,11 +33,10 @@ func AddCellsPage(pdf *gopdf.GoPdf, cells []Cell) error {
 	pdf.SetX(margin)
 	pdf.SetY(margin)
 	align := gopdf.Center | gopdf.Middle
-	border := gopdf.Top | gopdf.Right | gopdf.Bottom | gopdf.Left
 	for _, cell := range cells {
 		width := cell.Width()
 		height := cell.Height()
-		err := pdf.CellWithOption(&gopdf.Rect{W: width, H: height}, cell.Text(), gopdf.CellOption{Align: align, Border: border})
+		err := pdf.CellWithOption(&gopdf.Rect{W: width, H: height}, cell.Text(), gopdf.CellOption{Align: align, Border: cell.Border()})
 		if err != nil {
 			return errors.Wrap(err, "Error when calling pdf.CellWithOption")
 		}

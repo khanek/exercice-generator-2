@@ -1,6 +1,10 @@
 package words
 
-import "github.com/jinzhu/gorm"
+import (
+	"khanek/exercise-generator/core/database"
+
+	"github.com/jinzhu/gorm"
+)
 
 // Word is a model to store words
 type Word struct {
@@ -20,4 +24,24 @@ func WordsToStrings(words []*Word) []string {
 		ret[i] = words[i].Value
 	}
 	return ret
+}
+
+// FindWordsByTag returns words by tag
+func FindWordsByTag(tag string, limit uint) ([]*Word, error) {
+	var words []*Word
+	expectedTag := Tag{}
+	db := database.DB()
+	db.First(&expectedTag, "name = ?", tag)
+	db.Limit(limit).Order("RANDOM()").Model(&expectedTag).Related(&words, "Words")
+	return words, db.Error
+}
+
+// FindWordsByTagWithMinimumLenght returns words by tag but not shorted than X
+func FindWordsByTagWithMinimumLenght(tag string, limit uint, minWordLenght int) ([]*Word, error) {
+	var words []*Word
+	expectedTag := Tag{}
+	db := database.DB()
+	db.First(&expectedTag, "name = ?", tag)
+	db.Where("length(value) >= ?", minWordLenght).Limit(limit).Order("RANDOM()").Model(&expectedTag).Related(&words, "Words")
+	return words, db.Error
 }

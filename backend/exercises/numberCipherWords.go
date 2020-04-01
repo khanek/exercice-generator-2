@@ -22,7 +22,7 @@ func (e numberCipherWordsExercise) wordHandler(s string) string {
 func (e numberCipherWordsExercise) getTitle() []string {
 	var letterPairs []string
 	for k, v := range e.letterMapping {
-		pair := fmt.Sprintf("%s => %s", strings.ToUpper(string(k)), string(v))
+		pair := fmt.Sprintf("%s => %s", strings.ToUpper(string(v)), string(k))
 		letterPairs = append(letterPairs, pair)
 	}
 	return []string{

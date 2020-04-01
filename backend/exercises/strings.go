@@ -138,12 +138,15 @@ func addRandomLettersToWord(src string, n int) string {
 		}
 
 	}
-
-	/*
-		n=2, srcl = 3
-		0 - rand
-		1 - letter = 1
-		2 -
-	*/
 	return string(ret)
+}
+
+func isVowel(r rune) bool {
+	vowels := []rune{'a', 'ą', 'e', 'ę', 'i', 'o', 'ó', 'y'}
+	for _, v := range vowels {
+		if v == r {
+			return true
+		}
+	}
+	return false
 }
