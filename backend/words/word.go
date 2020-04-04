@@ -4,6 +4,8 @@ import (
 	"khanek/exercise-generator/core/database"
 
 	"github.com/jinzhu/gorm"
+	qorAdmin "github.com/qor/admin"
+	"github.com/qor/qor"
 )
 
 // Word is a model to store words
@@ -15,6 +17,20 @@ type Word struct {
 
 func (w Word) String() string {
 	return w.Value
+}
+
+func (w *Word) AdminActions() (actions []*qorAdmin.Action) {
+	return actions
+}
+
+func (w *Word) ConfigureResource(r *qorAdmin.Resource) error {
+	r.SearchAttrs("Value")
+	r.FindManyHandler = func(results interface{}, context *qor.Context) error {
+		db := context.GetDB()
+		db.Preload("Tags").Find(results)
+		return nil
+	}
+	return nil
 }
 
 func WordsToStrings(words []*Word) []string {

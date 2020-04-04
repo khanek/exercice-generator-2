@@ -2,3 +2,4 @@ app
 env
 test.db
 test.db.sql
+config/bindatafs/templates_bindatafs.go

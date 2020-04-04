@@ -12,7 +12,7 @@ import (
 var _db *gorm.DB
 var _once = sync.Once{}
 
-func connectionStrFromEnvs() string {
+func connectionStringFromEnvs() string {
 	connStr := "host=%s port=%s user=%s password=%s dbname=%s sslmode=%s"
 	return fmt.Sprintf(connStr, os.Getenv("POSTGRES_HOST"), os.Getenv("POSTGRES_PORT"), os.Getenv("POSTGRES_USER"), os.Getenv("POSTGRES_PASSWORD"), os.Getenv("POSTGRES_DB"), os.Getenv("POSTGRES_SSLMODE"))
 }
@@ -20,7 +20,7 @@ func connectionStrFromEnvs() string {
 // Initialize connection to database and returns this connection
 func Initialize() *gorm.DB {
 	_once.Do(func() {
-		db, err := gorm.Open("postgres", connectionStrFromEnvs())
+		db, err := gorm.Open("postgres", connectionStringFromEnvs())
 		if err != nil {
 			panic(err)
 		}
