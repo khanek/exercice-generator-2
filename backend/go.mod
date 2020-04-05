@@ -25,6 +25,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/qor/admin v0.0.0-20200315024928-877b98a68a6f
 	github.com/qor/assetfs v0.0.0-20170713023933-ff57fdc13a14
+	github.com/qor/bindatafs v0.0.0-20180208124510-71f37a9bdd10 // indirect
 	github.com/qor/media v0.0.0-20191022071353-19cf289e17d4 // indirect
 	github.com/qor/middlewares v0.0.0-20170822143614-781378b69454 // indirect
 	github.com/qor/oss v0.0.0-20191031055114-aef9ba66bf76 // indirect

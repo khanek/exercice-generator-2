@@ -1,0 +1,9 @@
+FROM golang:1.14
+WORKDIR /go/src/app
+# fetch deps
+COPY go.mod ./
+RUN go mod download
+# build
+COPY . .
+RUN make build
+CMD ["app"]

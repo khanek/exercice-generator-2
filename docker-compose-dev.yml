@@ -1,0 +1,8 @@
+version: '3'
+services:
+    backend:
+        build: 
+            context: ./backend
+            dockerfile: dockerfile-dev
+        volumes: 
+            - ./backend:/go/src/app

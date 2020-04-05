@@ -102,6 +102,8 @@ github.com/qor/admin v0.0.0-20200315024928-877b98a68a6f h1:U5CYGBUdxvfhmaPIqnFPa
 github.com/qor/admin v0.0.0-20200315024928-877b98a68a6f/go.mod h1:Sm5kX+Hkq1LKiFyqZJLnncUg8dWM/2roOEiy98NOUzA=
 github.com/qor/assetfs v0.0.0-20170713023933-ff57fdc13a14 h1:JRpyNNSRAkwNHd4WgyPcalTAhxOCh3eFNMoQkxWhjSw=
 github.com/qor/assetfs v0.0.0-20170713023933-ff57fdc13a14/go.mod h1:GZSCP3jIneuPsav3pXmpmJwz9ES+Fuq4ZPOUC3wwckQ=
+github.com/qor/bindatafs v0.0.0-20180208124510-71f37a9bdd10 h1:Mp8bFbjgdiy7iwKRrnwfrfbucAMvLVPj71lm20xqTwI=
+github.com/qor/bindatafs v0.0.0-20180208124510-71f37a9bdd10/go.mod h1:jkceY6M1XV2crPunbFw+qlBRXLZ9jT+vTVLTd+iPqzw=
 github.com/qor/media v0.0.0-20191022071353-19cf289e17d4 h1:hNxWeC5ixnBYYEhWni/teMtVctq6RZ1slGZlfxKn4ZA=
 github.com/qor/media v0.0.0-20191022071353-19cf289e17d4/go.mod h1:hzx9cTt5MpROMVIhwNhRJETc7e3a1J4bLNYflkcQ1wk=
 github.com/qor/middlewares v0.0.0-20170822143614-781378b69454 h1:+WCc1IigwWpWBxMFsmLUsIF230TakGHstDajd8aKDAc=
