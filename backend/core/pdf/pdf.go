@@ -1,6 +1,11 @@
 package pdf
 
 import (
+	"bytes"
+	"io"
+
+	"khanek/exercise-generator/config/bindatafs"
+
 	"github.com/pkg/errors"
 	"github.com/signintech/gopdf"
 )
@@ -10,11 +15,24 @@ type Writer interface {
 	ToPDF() (*gopdf.GoPdf, error)
 }
 
+func getFontReader() (io.Reader, error) {
+	assetFS := bindatafs.AssetFS.NameSpace("admin")
+	data, err := assetFS.Asset("assets/fonts/Roboto-Regular.ttf")
+	if err != nil {
+		return nil, err
+	}
+	return bytes.NewReader(data), nil
+}
+
 // NewPDF returns initialized instance of pdf
 func NewPDF() (*gopdf.GoPdf, error) {
 	pdf := &gopdf.GoPdf{}
 	pdf.Start(gopdf.Config{PageSize: *gopdf.PageSizeA4})
-	err := pdf.AddTTFFont("roboto", "/go/pkg/mod/github.com/signintech/gopdf@v0.9.6/test/res/times.ttf")
+	fontReader, err := getFontReader()
+	if err != nil {
+		return nil, err
+	}
+	err = pdf.AddTTFFontByReader("roboto", fontReader)
 	if err != nil {
 		return nil, errors.Wrap(err, "Couldn't add font")
 	}

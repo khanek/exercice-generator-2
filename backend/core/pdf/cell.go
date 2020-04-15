@@ -51,3 +51,7 @@ func NewHalfWidthPageCellWithoutBorder(text string) Cell {
 func NewFullWidthPageCell(text string) Cell {
 	return cell{text: text, width: gopdf.PageSizeA4.W, height: gopdf.PageSizeA4.H / float64(20), border: borderAll}
 }
+
+func NewFullWidthPageCellWithoutBorder(text string) Cell {
+	return cell{text: text, width: gopdf.PageSizeA4.W, height: gopdf.PageSizeA4.H / float64(20), border: 0}
+}

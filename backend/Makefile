@@ -7,11 +7,11 @@ GOGET=$(GOCMD) get
 BINARY_NAME=app
 
 all: test build
-buildCompileStaticExecute:
+config/bindatafs/templates_bindatafs.go:
 	$(GOBUILD) -o compile -v
 	./compile compileStatic
 	rm compile
-build: buildCompileStaticExecute
+build: config/bindatafs/templates_bindatafs.go
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BINARY_NAME) -v -tags 'bindatafs'
 test: 
 	$(GOTEST) -v ./...
