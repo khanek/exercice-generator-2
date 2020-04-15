@@ -4,7 +4,7 @@ import (
 	"github.com/signintech/gopdf"
 )
 
-const borderAll int = gopdf.Top | gopdf.Right | gopdf.Bottom | gopdf.Left
+const BorderAll int = gopdf.Top | gopdf.Right | gopdf.Bottom | gopdf.Left
 
 type Cell interface {
 	Text() string
@@ -41,7 +41,7 @@ func newCell(text string, width float64, height float64) Cell {
 }
 
 func NewHalfWidthPageCell(text string) Cell {
-	return cell{text: text, width: gopdf.PageSizeA4.W / 2, height: gopdf.PageSizeA4.H / float64(20), border: borderAll}
+	return cell{text: text, width: gopdf.PageSizeA4.W / 2, height: gopdf.PageSizeA4.H / float64(20), border: BorderAll}
 }
 
 func NewHalfWidthPageCellWithoutBorder(text string) Cell {
@@ -49,7 +49,7 @@ func NewHalfWidthPageCellWithoutBorder(text string) Cell {
 }
 
 func NewFullWidthPageCell(text string) Cell {
-	return cell{text: text, width: gopdf.PageSizeA4.W, height: gopdf.PageSizeA4.H / float64(20), border: borderAll}
+	return cell{text: text, width: gopdf.PageSizeA4.W, height: gopdf.PageSizeA4.H / float64(20), border: BorderAll}
 }
 
 func NewFullWidthPageCellWithoutBorder(text string) Cell {

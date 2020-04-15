@@ -85,7 +85,7 @@ func (assetFS *bindataFS) Asset(name string) ([]byte, error) {
 
 func (assetFS *bindataFS) Glob(pattern string) (matches []string, err error) {
 	if len(_bindata) > 0 {
-		for key, _ := range _bindata {
+		for key := range _bindata {
 			if ok, err := filepath.Match(pattern, key); ok && err == nil {
 				matches = append(matches, key)
 			}

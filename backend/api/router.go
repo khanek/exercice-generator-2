@@ -34,4 +34,6 @@ func AddUrls(r *gin.Engine) {
 	})
 	r.GET(generateURL("/splitted"), generateSimpleWordsExercisePDF(exercises.NewSplittedWordsExercise))
 	r.GET(generateURL("/features"), generateSimpleWordsExercisePDF(exercises.NewWordsWithFeaturesExercise))
+	r.GET(generateURL("/starts-with-letter"), generateSimpleWordsExercisePDF(exercises.NewWordsStartByLetterExercise))
+	r.GET(generateURL("/ends-with-letter"), generateSimpleWordsExercisePDF(exercises.NewWordsEndByLetterExercise))
 }
