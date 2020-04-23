@@ -61,3 +61,13 @@ func FindWordsByTagWithMinimumLenght(tag string, limit uint, minWordLenght int) 
 	db.Where("length(value) >= ?", minWordLenght).Limit(limit).Order("RANDOM()").Model(&expectedTag).Related(&words, "Words")
 	return words, db.Error
 }
+
+// FindWordsByTagWithMaximumLenght returns words by tag but not longer than X
+func FindWordsByTagWithMaximumLenght(tag string, limit uint, minWordLenght int) ([]*Word, error) {
+	var words []*Word
+	expectedTag := Tag{}
+	db := database.DB()
+	db.First(&expectedTag, "name = ?", tag)
+	db.Where("length(value) <= ?", minWordLenght).Limit(limit).Order("RANDOM()").Model(&expectedTag).Related(&words, "Words")
+	return words, db.Error
+}

@@ -25,9 +25,9 @@ func AddUrls(r *gin.Engine) {
 	r.GET(generateURL("/replaced-letters-with-numbers"), generateSimpleWordsExercisePDF(exercises.NewNumberCipherWordsExercise))
 	r.GET(generateURL("/messy"), generateSimpleWordsExercisePDF(exercises.NewMessyWordsExercise))
 	r.GET(generateURL("/ceasar"), func(c *gin.Context) {
-		exerciseFactory := exercises.NewCeasarExercise
-		if _, exist := c.GetQuery("withHelp"); exist {
-			exerciseFactory = exercises.NewCeasarWithHelpExercise
+		exerciseFactory := exercises.NewCeasarWithHelpExercise
+		if _, exist := c.GetQuery("withoutHelp"); exist {
+			exerciseFactory = exercises.NewCeasarExercise
 		}
 		httpHandler := generateSimpleWordsExercisePDF(exerciseFactory)
 		httpHandler(c)
@@ -36,4 +36,6 @@ func AddUrls(r *gin.Engine) {
 	r.GET(generateURL("/features"), generateSimpleWordsExercisePDF(exercises.NewWordsWithFeaturesExercise))
 	r.GET(generateURL("/starts-with-letter"), generateSimpleWordsExercisePDF(exercises.NewWordsStartByLetterExercise))
 	r.GET(generateURL("/ends-with-letter"), generateSimpleWordsExercisePDF(exercises.NewWordsEndByLetterExercise))
+	r.GET(generateURL("/simple-math"), generateSimpleWordsExercisePDF(exercises.NewSimpleMathExercise))
+	r.GET(generateURL("/missing-first-last-letter"), generateSimpleWordsExercisePDF(exercises.NewMissingFirstLastLetterExercise))
 }

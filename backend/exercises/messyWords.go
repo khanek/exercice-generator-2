@@ -8,20 +8,31 @@ import (
 	"github.com/signintech/gopdf"
 )
 
+const maxMessyWordLenght = 20
+
 type messyExercise struct {
 	Tag string
 }
 
 func (e messyExercise) getTitle() []string {
-	return []string{"W podanych wyrazach mamy za dużo liter. Proszę wykreślić niepotrzebne litery aby powstały słowa."}
+	return []string{
+		"W podanych wyrazach mamy za dużo liter.",
+		"Proszę wykreślić niepotrzebne litery aby powstały słowa.",
+	}
 }
 
 func (e messyExercise) wordHandler(s string) string {
-	return addRandomLettersToWord(s, math.RandomInt(4, 10))
+	wordLenght := len(s)
+	if wordLenght >= 30 {
+		return s
+	}
+	max := math.Max(maxMessyWordLenght-maxMessyWordLenght, 10)
+	min := math.Min(4, max)
+	return addRandomLettersToWord(s, math.RandomInt(min, max))
 }
 
 func (e messyExercise) getWords() ([]*words.Word, error) {
-	words, err := words.FindWordsByTag(e.Tag, 40)
+	words, err := words.FindWordsByTagWithMaximumLenght(e.Tag, 40, maxMessyWordLenght)
 	if err != nil {
 		return nil, err
 	}
